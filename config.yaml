@@ -1,0 +1,51 @@
+# configuration used to set algorithmic parameters. See the documentation for information on the keys and values contained here in
+global:
+  max_iter: 1000
+  max_iter_no_improvement: 100
+  S:
+    - vertex_1
+    - vertex_2
+    - vertex_3
+
+
+# ANT COLONY
+aco:
+    beta: 0.25
+    heuristic: betweenness_centrality
+    init_colony_with_op_s: false
+    max_iter: 500
+    max_iter_no_improvement: 50
+    num_elite: 0.5
+    population_size: 0.1
+    rho: 0.1
+    tau_0: 1.0
+    max_iter: 1000
+
+# GENETIC
+genetic:
+  init_colony_with_op_s: false
+  max_iter: 500
+  max_iter_no_improvement: 50
+  num_elite: 0.5
+  population_size: 0.1
+
+# GREEDY STOCHASTIC
+gs:
+  epsilon: 0.000001
+  max_iter: 1000
+  max_iter_no_improvement: 100
+
+# GRADIENT DESCENT
+graddesc:
+  max_iter: 1000
+  max_iter_no_improvement: 100
+
+# SIMULATED ANNEALING
+sann:
+  alpha: 1.0
+  max_exploration_error: 0.25
+  max_iter: 1000
+  max_iter_no_improvement: 100
+  q: 0.5
+  randomize_swap_count: false
+  restart_from_best_fraction: 0.33
