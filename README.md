@@ -1,5 +1,71 @@
 # Run DiscreteGraphAlgorithms (RunDGA)
 
+The RunDGA utility allows users to run the `DiscreteGraphAlgorithms` package from the command line and identify collections of vertices that fragment a graph.
+
+
+##  Installation
+
+To install RunDGA, the following Julia packages (registered in the Julia repo) are required:
+
+- `add ArgParse`
+- `add YAML`
+
+Additionally, unregistered packages are available on external githubs that can be added using (using the Julia Pkg manager or `Pkg.add()`) in the following order:
+
+- `add "https://github.com/jcsyme/IterativeHeaps.jl"` 
+- `add "https://github.com/jcsyme/GraphDistanceAlgorithms.jl"`
+- `add "https://github.com/jcsyme/GraphFragments.jl/"`
+- `add "https://github.com/jcsyme/DiscreteGraphAlgorithms.jl.git"`
+
+Users should activate a Julia environment and install these packages within a self-contained environment. To do this, use `Pkg.activate("PATH_TO_ENVIRONMENT")` or `activate PATH_TO_ENVIRONMENT` from the Julia Pkg manager.
+
+
+##  Graph Fragmentation from The Command Line
+
+The command line utilities allows users to run Fragmentation on a graph without starting the Julia repl. To do so, use the command line form:
+
+```julia [-t] [-p] run_dga.jl file-sparse-adjmat num-vertices [--algorithms]```
+
+To take advantage of the DiscreteGraphAlgorithms package, users can take advantage of both parallelization. Multithreading is available when the number of threads available to Julia is > 1, and users can specify this parameter using the `-t` flag. Additionally, worker processes should be activated for larger graphs (e.g., > 200 vertices). To start Julia using multiple processes, specify the `-p` flag. A good heuristic is to specify the number of threads using 1-1.5 the number of logical cores and close to the number of available cores as workers. For example, a 12 core MacBookPro has performed well on a graph with > 2000 vertices and 7000 edges using `julia -t 20 -p 10 ...`.
+
+
+###  Required Command Line Arguments
+
+The following command line arguments are required to call `run_dga`:
+
+* `file-sparse-adjmat`: Path to a file containing the sparse adjacency matrix for an undirected graph. This file should include source vertices--denoted as names or numbers or some combination thereof--in the first column, target vertices in the second column, and any weights (optional, integer or float) in the third column. The file should be a `.csv` (comma separated), `.tsv` (tab separated), or `.egl` (delimited by space--in this case, vertex names should not contain any spaces).
+
+* `num-vertices`: The size of the solution set |S| of vertices to identify using DiscreteGraphAlgorithms; in the current case, the number of vertices to remove to improve fragmentation.
+
+
+###  Optional Command Line Arguments
+
+In addition to Julia parameters, users can specify optional command line arguments:
+
+* `algorithms`: Optional specification of the algoithms to run on the graph to identify optimal framgentation. Algorithms should be specified using the algorithm's key (abbreviation shown in parameters below; e.g., `aco` for ant colony optimization) and delimed by commas. For example,
+
+	`--algorithms aco,genetic,graddesc`
+
+will run the ant colony optimization, genetic, and gradient descent algorithms. If not specified, all algorithms are run. Alternatively, `--algorithms all` will run all algorithms available. 
+
+
+## Specifying Parameters 
+
+Parameters that govern algorithmic behavior can significantly affect the performance of algorithms. For example, the size of an ant colony or genetic organism affects the breadth of the space that is explored but slows iteration time. 
+
+These parameters can be specified in one of two ways:
+
+1. In a configuration file
+1. At the command line [IN DEVELOPMENT]
+
+In the event of a conflict between the two, the command line takes precedence. This allows for users to set expected defaults for a problem in the configuration file, then experiment with tweaking different parameteriations more easily at the command line.
+
+
+###  The Configuration File
+
+Running multiple algorithms at the same time could introduce long, confusing chains of command line arguments. To support easier specification of algorithm parameters, `RunDGA` lets you specify parameters in a configuration file. This file, `config.yaml` includes parameters for both global and algorithm-specific use.
+
+
 
 ##  Algorithms
 
@@ -134,30 +200,6 @@ Currently, the `DiscreteGraphAlgorithms` package only supports the use of maximi
 
 
 
-##  The Command Line Utility
-
-
-## Specifying Parameters 
-
-Parameters that govern algorithmic behavior can significantly affect the performance of algorithms. For example, the size of an ant colony or genetic organism affects the breadth of the space that is explored but slows iteration time. 
-
-These parameters can be specified in one of two ways:
-
-1. At the command line
-1. In a configuration file
-
-In the event of a conflict between the two, the command line takes precedence. This allows for users to set expected defaults for a problem in the configuration file, then experiment with tweaking different parameteriations more easily at the command line.
-
-
-###  At the Command Line
-
-Parameters are entered at the command line using flags. For example, 
-
-```julia run_dga.jl --aco-rho 0.4```
-
-
-###  The Configuration File
-
-Running multiple algorithms at the same time could introduce long, confusing chains of command line arguments. To support easier specification of algorithm parameters, `RunDGA` lets you specify parameters in a configuration file. This file, `config.yaml` includes parameters for both global and algorithm-specific use.
+# Funding
 
 
